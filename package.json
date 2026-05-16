@@ -1,0 +1,11 @@
+{
+  "name": "teloscope",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Vitrine OSINT fakecom.me / faketel.me / fauxtel.me, alignée sur VocalGuard.",
+  "scripts": {
+    "dev": "npx --yes serve site -l 3080",
+    "start": "npm run dev",
+    "check": "node --check site/config.js && node --check site/verify.js && node scripts/check-site.mjs"
+  }
+}

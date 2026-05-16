@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Vérifier un numéro de téléphone — OSINT Teloscope">
+  <title>Vérifier un numéro — Teloscope</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <p class="badge">Étape 1</p>
+      <h1>Vérifier un numéro</h1>
+      <p class="lead">Croisement de sources légales et signaux publics : opérateur, type de ligne, réputation, recommandation avant de répondre.</p>
+      <nav>
+        <a href="index.html">Accueil</a>
+        <a href="verify.html" aria-current="page">Vérifier un numéro</a>
+        <a href="hardware.html">Filtre matériel</a>
+        <a href="about.html">À propos</a>
+        <a href="contact.html">Contact</a>
+        <a href="mentions-legales.html">Mentions légales</a>
+      </nav>
+    </header>
+
+    <div class="card">
+      <div id="demo-banner" class="banner" hidden>
+        Mode démo : aucune API VocalGuard configurée dans <code>config.js</code>. Les résultats sont simulés à titre d’aperçu.
+      </div>
+      <form id="verify-form" class="verify-form" action="#" method="post">
+        <label for="phone-input">Numéro à analyser</label>
+        <input type="tel" id="phone-input" name="phone" placeholder="+33 6 12 34 56 78" autocomplete="tel" required>
+        <button type="submit" class="btn">Analyser</button>
+      </form>
+      <p class="hint">Formats acceptés : 06…, +33…, 0033… Les traitements réels passent par VocalGuard une fois l’API branchée.</p>
+      <p id="verify-status" class="status" hidden></p>
+      <div id="verify-result" hidden></div>
+    </div>
+
+    <footer>
+      <a href="hardware.html">Étape 2 — filtre matériel</a> · <a href="index.html">Accueil</a>
+    </footer>
+  </div>
+  <script src="config.js"></script>
+  <script src="verify.js"></script>
+</body>
+</html>

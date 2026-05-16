@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Teloscope — vérifiez un numéro par OSINT, puis protégez votre ligne des appels commerciaux.">
+  <title>Teloscope — Vérifier un numéro, filtrer les appels commerciaux</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <p class="badge">fakecom · faketel · fauxtel</p>
+      <h1>Teloscope</h1>
+      <p class="lead">D’abord comprendre qui appelle grâce à l’OSINT et aux sources légales. Ensuite, si besoin, filtrer les sollicitations commerciales avant qu’elles n’atteignent votre poste.</p>
+      <nav>
+        <a href="index.html" aria-current="page">Accueil</a>
+        <a href="verify.html">Vérifier un numéro</a>
+        <a href="hardware.html">Filtre matériel</a>
+        <a href="about.html">À propos</a>
+        <a href="contact.html">Contact</a>
+        <a href="mentions-legales.html">Mentions légales</a>
+      </nav>
+    </header>
+
+    <ol class="steps">
+      <li>
+        <p class="step-num">Étape 1</p>
+        <h3>Vérifier le numéro</h3>
+        <p>Opérateur, type de ligne, zone, réputation spam, croisement de signaux publics — pour décider avant de répondre ou de rappeler.</p>
+        <a class="btn" href="verify.html">Lancer une vérification</a>
+      </li>
+      <li>
+        <p class="step-num">Étape 2</p>
+        <h3>Filtrer en amont</h3>
+        <p>Équipement dédié pour bloquer ou classer les appels commerciaux sur votre ligne, en complément des rapports Teloscope.</p>
+        <a class="btn btn--ghost" href="hardware.html">Voir l’offre matérielle</a>
+      </li>
+    </ol>
+
+    <div class="card">
+      <h2>Moteur VocalGuard</h2>
+      <p>L'enrichissement reel (API, jobs, base <code>phone_number_profiles</code>, NumLookup, PhoneInfoga) tourne dans <strong>VocalGuard</strong>. Teloscope est la vitrine et le parcours sur les domaines <code>.me</code> ; configurez <code>site/config.js</code> pour brancher l'API.</p>
+    </div>
+
+    <div class="card">
+      <h2>Autres offres</h2>
+      <ul class="offers">
+        <li><strong>Application mobile</strong> — rapports, alertes, préférences.</li>
+        <li><strong>Accompagnement</strong> — règles, listes et bonnes pratiques autour du filtrage.</li>
+      </ul>
+    </div>
+
+    <footer>
+      Teloscope · fakecom.me · faketel.me · fauxtel.me
+    </footer>
+  </div>
+</body>
+</html>

@@ -1,4 +1,5 @@
 window.TELOSCOPE_CONFIG = {
   apiBase: "",
-  lookupPath: "/api/v1/phone/lookup"
+  /** GET {apiBase}{osintPath}/{+33...} — API VocalGuard */
+  osintPath: "/api/v1/osint/phone"
 };

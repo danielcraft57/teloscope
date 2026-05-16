@@ -33,7 +33,7 @@
         <input type="tel" id="phone-input" name="phone" placeholder="+33 6 12 34 56 78" autocomplete="tel" required>
         <button type="submit" class="btn">Analyser</button>
       </form>
-      <p class="hint">Formats acceptés : 06…, +33…, 0033… Les traitements réels passent par VocalGuard une fois l’API branchée.</p>
+      <p class="hint">Formats : 06…, +33…, 0033… Avec <code>apiBase</code> dans <code>config.js</code> : appel <code>GET /api/v1/osint/phone/{numéro}</code> (VocalGuard — PhoneInfoga, NumLookup, détection commerciale, etc.).</p>
       <p id="verify-status" class="status" hidden></p>
       <div id="verify-result" hidden></div>
     </div>
@@ -43,6 +43,7 @@
     </footer>
   </div>
   <script src="config.js"></script>
+  <script src="osint-mapper.js"></script>
   <script src="verify.js"></script>
 </body>
 </html>

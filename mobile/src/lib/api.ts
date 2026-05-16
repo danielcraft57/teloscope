@@ -1,44 +1,54 @@
 import Constants from "expo-constants";
 import { demoProfile } from "./demoProfile";
+import {
+  mapVocalGuardOsint,
+  osintPhoneUrl,
+  type PhoneProfile,
+  type VocalGuardOsint,
+} from "./vocalguard";
 
-export type PhoneProfile = {
-  phone: string;
-  mode?: "demo" | "live";
-  summary?: string;
-  line?: { type?: string; carrier?: string; region?: string };
-  reputation?: { spam_score?: number; reports_count?: number; label?: string };
-  recommendation?: string;
-  isCommercial?: boolean;
-};
+export type { PhoneProfile };
 
 function getConfig() {
   const extra = Constants.expoConfig?.extra as
-    | { apiBase?: string; lookupPath?: string }
+    | { apiBase?: string; osintPath?: string; lookupPath?: string }
     | undefined;
   return {
     apiBase: (extra?.apiBase || "").replace(/\/$/, ""),
-    lookupPath: extra?.lookupPath || "/api/v1/phone/lookup",
+    osintPath: extra?.osintPath || extra?.lookupPath || "/api/v1/osint/phone",
   };
 }
 
-export async function lookupPhone(raw: string): Promise<PhoneProfile> {
-  const { apiBase, lookupPath } = getConfig();
+export async function lookupPhone(
+  raw: string,
+  callerName?: string
+): Promise<PhoneProfile> {
+  const { apiBase, osintPath } = getConfig();
   if (!apiBase) {
     await new Promise((r) => setTimeout(r, 350));
     return demoProfile(raw);
   }
-  const res = await fetch(apiBase + lookupPath, {
-    method: "POST",
-    headers: { "Content-Type": "application/json", Accept: "application/json" },
-    body: JSON.stringify({ phone: raw }),
+  const url = osintPhoneUrl(apiBase, osintPath, raw, callerName);
+  const res = await fetch(url, {
+    method: "GET",
+    headers: { Accept: "application/json" },
   });
-  if (!res.ok) throw new Error(await res.text().catch(() => `HTTP ${res.status}`));
-  const data = (await res.json()) as PhoneProfile;
-  if (!data.phone) data.phone = raw;
-  data.mode = "live";
-  if (data.isCommercial == null) {
-    const score = data.reputation?.spam_score ?? 0;
-    data.isCommercial = score > 55 || data.line?.type === "VoIP";
+  if (!res.ok) {
+    throw new Error(await res.text().catch(() => `HTTP ${res.status}`));
   }
-  return data;
+  const data = (await res.json()) as VocalGuardOsint;
+  return mapVocalGuardOsint(data, raw);
+}
+
+export async function fetchOsintTools(): Promise<{
+  is_wsl?: boolean;
+  available_tools?: Record<string, boolean>;
+}> {
+  const { apiBase } = getConfig();
+  if (!apiBase) return {};
+  const res = await fetch(`${apiBase}/api/v1/osint/tools`, {
+    headers: { Accept: "application/json" },
+  });
+  if (!res.ok) return {};
+  return res.json();
 }

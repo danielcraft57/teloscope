@@ -1,4 +1,4 @@
-import type { PhoneProfile } from "./api";
+import type { PhoneProfile } from "./vocalguard";
 
 function hashStr(str: string): number {
   let h = 0;

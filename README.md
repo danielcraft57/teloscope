@@ -27,18 +27,28 @@ npm run dev
 
 Ouvre `http://localhost:3080`. Sans API configurée, `/verify.html` fonctionne en **mode démo** (résultats déterministes, pas d’appel réseau OSINT).
 
-### Brancher l’API VocalGuard
+### Brancher l’API VocalGuard (OSINT réel)
 
-Éditer `site/config.js` :
+Éditer `site/config.js` (et `mobile/app.json` → `expo.extra`) :
 
 ```js
 window.TELOSCOPE_CONFIG = {
   apiBase: "https://votre-instance-vocalguard.example",
-  lookupPath: "/api/v1/phone/lookup"
+  osintPath: "/api/v1/osint/phone"
 };
 ```
 
-Le client envoie un `POST` JSON `{ "phone": "+33..." }` et affiche la réponse. Adapter `lookupPath` si votre route diffère.
+Teloscope appelle **`GET {apiBase}{osintPath}/+33…`** — la même route que VocalGuard (`/api/v1/osint/phone/{numero}`).
+
+Outils côté serveur (si installés / clés `.env`) : PhoneInfoga, NumLookup, NumVerify, OpenCNAM, HLR, Truecaller, theHarvester, détection commerciale FR, Nomorobo / ShouldIAnswer, etc. Voir `VocalGuard/docs/OSINT.md`.
+
+Liste des outils actifs sur votre instance :
+
+```bash
+curl https://votre-instance/api/v1/osint/tools
+```
+
+**CORS** : autoriser l’origine du site `.me` sur l’API FastAPI si le navigateur bloque les requêtes.
 
 ## CI / CD (GitHub Actions)
 

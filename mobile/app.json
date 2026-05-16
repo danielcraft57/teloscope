@@ -48,7 +48,7 @@
     "extra": {
       "router": {},
       "apiBase": "",
-      "lookupPath": "/api/v1/phone/lookup"
+      "osintPath": "/api/v1/osint/phone"
     }
   }
 }

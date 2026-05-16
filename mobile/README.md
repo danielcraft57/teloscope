@@ -30,8 +30,10 @@ Dans `app.json` → `expo.extra` :
 
 ```json
 "apiBase": "https://votre-vocalguard.example",
-"lookupPath": "/api/v1/phone/lookup"
+"osintPath": "/api/v1/osint/phone"
 ```
+
+Appel : `GET /api/v1/osint/phone/+33…` (enrichissement OSINT VocalGuard).
 
 ## Android — rôle filtrage
 

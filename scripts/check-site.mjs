@@ -12,6 +12,7 @@ const required = [
   "site/mentions-legales.html",
   "site/style.css",
   "site/config.js",
+  "site/osint-mapper.js",
   "site/verify.js",
 ];
 

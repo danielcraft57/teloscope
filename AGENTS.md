@@ -32,7 +32,7 @@ Guide pour les agents qui modifient ce dépôt.
 ## Mode démo vs API
 
 - `apiBase` vide → `verify.js` génère un profil démo déterministe (hash du numéro).
-- `apiBase` renseigné → `POST` vers `lookupPath`, affichage JSON normalisé ou erreur lisible.
+- `apiBase` renseigné → `GET` vers `{osintPath}/{numéro}` (VocalGuard `/api/v1/osint/phone/…`), mappé via `site/osint-mapper.js` ou `mobile/src/lib/vocalguard.ts`.
 
 ## Déploiement
 

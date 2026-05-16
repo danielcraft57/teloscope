@@ -82,6 +82,11 @@ export default function VerifyScreen() {
           <Text style={styles.line}>
             Spam {profile.reputation?.spam_score ?? "—"}/100 ({profile.reputation?.label})
           </Text>
+          {profile.osint?.sources_checked?.length ? (
+            <Text style={styles.line}>
+              Sources : {profile.osint.sources_checked.join(" · ")}
+            </Text>
+          ) : null}
           <Text style={styles.reco}>{profile.recommendation}</Text>
           {(profile.isCommercial || (profile.reputation?.spam_score ?? 0) > 55) && (
             <Pressable style={[styles.btn, styles.btnSecondary]} onPress={onMarkCommercial}>

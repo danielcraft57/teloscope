@@ -9,7 +9,7 @@
 
   const cfg = window.TELOSCOPE_CONFIG || {};
   const apiBase = (cfg.apiBase || "").replace(/\/$/, "");
-  const lookupPath = cfg.lookupPath || "/api/v1/phone/lookup";
+  const osintPath = cfg.osintPath || cfg.lookupPath || "/api/v1/osint/phone";
   const isDemo = !apiBase;
 
   if (demoBanner) demoBanner.hidden = !isDemo;
@@ -88,7 +88,7 @@
     const line = data.line || {};
     const rep = data.reputation || {};
     const osint = data.osint || {};
-    const sources = osint.sources_checked || [];
+    const sources = osint.sources_checked || osint.tools_used || [];
 
     resultEl.hidden = false;
     resultEl.innerHTML =
@@ -104,6 +104,12 @@
       row("Score spam", rep.spam_score != null ? rep.spam_score + " / 100 (" + (rep.label || "") + ")" : "—") +
       row("Signalements", rep.reports_count != null ? String(rep.reports_count) : "—") +
       row("Hits publics", osint.public_hits != null ? String(osint.public_hits) : "—") +
+      (osint.is_commercial != null
+        ? row("Commercial", osint.is_commercial ? "oui" : "non")
+        : "") +
+      (osint.confidence != null
+        ? row("Confiance", String(Math.round(osint.confidence * 100)) + " %")
+        : "") +
       "</dl>" +
       (sources.length
         ? '<p class="result-sources"><strong>Sources :</strong> ' + sources.map(esc).join(" · ") + "</p>"
@@ -119,20 +125,21 @@
   }
 
   async function fetchProfile(e164) {
-    const url = apiBase + lookupPath;
-    const res = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Accept: "application/json" },
-      body: JSON.stringify({ phone: e164 })
+    var mapper = window.TELOSCOPE_OSINT;
+    if (!mapper || !mapper.osintPhoneUrl || !mapper.mapVocalGuardOsint) {
+      throw new Error("osint-mapper.js manquant");
+    }
+    var url = mapper.osintPhoneUrl(apiBase, osintPath, e164);
+    var res = await fetch(url, {
+      method: "GET",
+      headers: { Accept: "application/json" }
     });
     if (!res.ok) {
-      const t = await res.text();
+      var t = await res.text();
       throw new Error(t || "Erreur " + res.status);
     }
-    const data = await res.json();
-    if (!data.phone) data.phone = e164;
-    data.mode = "live";
-    return data;
+    var raw = await res.json();
+    return mapper.mapVocalGuardOsint(raw, e164);
   }
 
   form.addEventListener("submit", async function (e) {
@@ -145,7 +152,7 @@
     }
 
     input.value = normalized;
-    setStatus(isDemo ? "Analyse en mode démo…" : "Interrogation de l’API…", "loading");
+    setStatus(isDemo ? "Analyse en mode démo…" : "Interrogation VocalGuard OSINT…", "loading");
     resultEl.hidden = true;
 
     try {

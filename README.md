@@ -56,9 +56,13 @@ Le client envoie un `POST` JSON `{ "phone": "+33..." }` et affiche la réponse. 
 | `SSH_PORT` | `22` (optionnel) |
 | `DEPLOY_PATH` | `/var/www/teloscope/` |
 
-Sans ces secrets, le **CI** passe ; le **deploy** échoue jusqu’à configuration.
+1. Créer les secrets ci-dessus (environnement `production`).
+2. Ajouter une variable de dépôt **Settings → Secrets and variables → Actions → Variables** :
+   - `DEPLOY_ENABLED` = `true`
 
-Déploiement manuel : onglet Actions → Deploy → Run workflow.
+Sans `DEPLOY_ENABLED`, le workflow Deploy est ignoré (CI seul sur chaque push).
+
+Déploiement manuel : Actions → **Deploy** → **Run workflow** (avec `DEPLOY_ENABLED=true`).
 
 ## Déploiement manuel
 

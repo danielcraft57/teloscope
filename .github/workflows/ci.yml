@@ -22,8 +22,21 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Vérifications
+      - name: Vérifications site
         run: npm run check
+
+      - name: Setup Node (mobile)
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install mobile
+        working-directory: mobile
+        run: npm install
+
+      - name: Typecheck mobile
+        working-directory: mobile
+        run: npm run typecheck
 
       - name: Archive site (artifact)
         uses: actions/upload-artifact@v4

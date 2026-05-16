@@ -17,6 +17,7 @@ Teloscope est le **nom et le parcours client** côté `.me`. Le moteur d’enric
 | `site/verify.html` | Formulaire de vérification de numéro |
 | `site/hardware.html` | Présentation de l’offre matérielle |
 | `site/config.js` | URL de l’API VocalGuard (vide = mode démo) |
+| `mobile/` | App React Native (Expo) — filtrage Android + message commercial |
 
 ## Développement local
 

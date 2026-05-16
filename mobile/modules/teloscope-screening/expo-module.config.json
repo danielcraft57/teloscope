@@ -1,0 +1,6 @@
+{
+  "platforms": ["android"],
+  "android": {
+    "modules": ["fr.danielcraft.teloscope.screening.TeloscopeScreeningModule"]
+  }
+}

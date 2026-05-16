@@ -6,6 +6,7 @@ const required = [
   "site/index.html",
   "site/verify.html",
   "site/hardware.html",
+  "site/mobile.html",
   "site/about.html",
   "site/contact.html",
   "site/mentions-legales.html",

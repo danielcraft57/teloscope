@@ -1,0 +1,10 @@
+{
+  "name": "teloscope-screening",
+  "version": "0.1.0",
+  "main": "index.ts",
+  "peerDependencies": {
+    "expo": "*",
+    "react": "*",
+    "react-native": "*"
+  }
+}

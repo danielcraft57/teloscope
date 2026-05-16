@@ -10,7 +10,8 @@ Guide pour les agents qui modifient ce dépôt.
 ## Priorité produit (ordre obligatoire)
 
 1. **Vérification / enrichissement téléphone** — UX claire, résultats structurés, mode démo si pas d’API.
-2. **Offre matérielle anti-sollicitations commerciales** — message commercial, pas de schéma technique détaillé sur le site public sans accord explicite.
+2. **Application mobile** (`mobile/`) — vérif numéro, enregistrement message, blocage Android via `CallScreeningService` (build natif, pas Expo Go).
+3. **Offre matérielle anti-sollicitations commerciales** — message commercial, pas de schéma technique détaillé sur le site public sans accord explicite.
 
 ## Fichiers à connaître
 
@@ -40,5 +41,5 @@ Contenu servi depuis `site/` vers `/var/www/teloscope`. Pas de build obligatoire
 ## Hors scope par défaut
 
 - Implémentation complète VocalGuard
-- Paiement, compte utilisateur, app mobile native
+- Paiement, compte utilisateur cloud
 - Détails du firmware / schéma du filtre matériel sur les pages publiques

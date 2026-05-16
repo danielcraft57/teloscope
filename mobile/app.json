@@ -1,0 +1,54 @@
+{
+  "expo": {
+    "name": "Teloscope",
+    "slug": "teloscope",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "scheme": "teloscope",
+    "userInterfaceStyle": "dark",
+    "newArchEnabled": true,
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0f1419"
+    },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "fr.danielcraft.teloscope",
+      "infoPlist": {
+        "NSMicrophoneUsageDescription": "Enregistrer le message diffusé aux appelants commerciaux."
+      }
+    },
+    "android": {
+      "package": "fr.danielcraft.teloscope",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#0f1419"
+      },
+      "permissions": [
+        "android.permission.READ_PHONE_STATE",
+        "android.permission.READ_CALL_LOG",
+        "android.permission.RECORD_AUDIO"
+      ]
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-av",
+        {
+          "microphonePermission": "Autoriser Teloscope à enregistrer votre message pour les appelants commerciaux."
+        }
+      ],
+      "./plugins/withTeloscopeCallScreening"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "apiBase": "",
+      "lookupPath": "/api/v1/phone/lookup"
+    }
+  }
+}

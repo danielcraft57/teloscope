@@ -1,45 +1,36 @@
 # AGENTS.md — Teloscope
 
-Guide pour les agents qui modifient ce dépôt.
+**Un seul dépôt à modifier : Teloscope.** Pas de dépendance à d’autres projets DanielCraft pour faire tourner l’OSINT.
 
-## Rôle du dépôt
+## Architecture
 
-**Teloscope** = vitrine statique + parcours utilisateur (vérifier un numéro → découvrir le filtre matériel).  
-**VocalGuard** = moteur (API, Celery, base, OSINT réel). Ne pas dupliquer la logique OSINT ici sauf maquette ou client HTTP mince.
+| Composant | Rôle |
+|-----------|------|
+| `site/` | Vitrine statique, `verify.html` appelle l’API |
+| `backend/` | FastAPI OSINT (`/api/v1/osint/phone/{numero}`) |
+| `mobile/` | Expo + module Android call screening |
+| `docs/OSINT.md` | Liste des outils |
 
-## Priorité produit (ordre obligatoire)
+## API
 
-1. **Vérification / enrichissement téléphone** — UX claire, résultats structurés, mode démo si pas d’API.
-2. **Application mobile** (`mobile/`) — vérif numéro, enregistrement message, blocage Android via `CallScreeningService` (build natif, pas Expo Go).
-3. **Offre matérielle anti-sollicitations commerciales** — message commercial, pas de schéma technique détaillé sur le site public sans accord explicite.
+- `GET /api/v1/osint/phone/+33…` — enrichissement
+- `GET /api/v1/osint/tools` — outils actifs
+- Clients : `site/osint-mapper.js`, `mobile/src/lib/osint-response.ts`
 
-## Fichiers à connaître
+## Règles
 
-- `site/index.html` — accueil, entonnoir produit
-- `site/verify.html` + `site/verify.js` — lookup numéro
-- `site/hardware.html` — offre boîtier / filtrage
-- `site/config.js` — `apiBase` pour VocalGuard
-- `site/style.css` — thème unique, pas de framework lourd
+- Nouvelles briques OSINT → `backend/services/`, pas ailleurs.
+- Site reste statique ; pas de logique OSINT lourde dans `site/` sauf démo.
+- UI en français. Pas de secrets dans le repo.
+- `apiBase` vide = mode démo site/mobile.
 
-## Règles de modification
+## Priorité produit
 
-- Garder le site **statique** (pas de backend dans ce repo sauf demande explicite).
-- Chemins CSS/JS : préférer **relatifs** (`style.css`) pour le dev local ; les liens de nav peuvent rester relatifs (`verify.html`).
-- Ne pas promettre sur la vitrine des sources OSINT illégales ou du scraping hors cadre.
-- Texte en **français** pour l’UI publique.
-- Ne pas committer de secrets (clés API) dans `config.js` — l’API VocalGuard est côté serveur.
+1. Vérification numéro (API + UX)
+2. App mobile (blocage commercial Android)
+3. Vente matérielle (message public limité)
 
-## Mode démo vs API
+## Hors scope
 
-- `apiBase` vide → `verify.js` génère un profil démo déterministe (hash du numéro).
-- `apiBase` renseigné → `GET` vers `{osintPath}/{numéro}` (VocalGuard `/api/v1/osint/phone/…`), mappé via `site/osint-mapper.js` ou `mobile/src/lib/vocalguard.ts`.
-
-## Déploiement
-
-Contenu servi depuis `site/` vers `/var/www/teloscope`. Pas de build obligatoire ; `npm run dev` utilise `serve` pour le preview.
-
-## Hors scope par défaut
-
-- Implémentation complète VocalGuard
-- Paiement, compte utilisateur cloud
-- Détails du firmware / schéma du filtre matériel sur les pages publiques
+- Paiement, comptes cloud
+- Détails firmware filtre matériel sur le site public

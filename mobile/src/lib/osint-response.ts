@@ -1,5 +1,5 @@
-/** Réponse GET /api/v1/osint/phone/{numero} (VocalGuard) */
-export type VocalGuardOsint = {
+/** Réponse GET /api/v1/osint/phone/{numero} (API Teloscope) */
+export type OsintApiResponse = {
   phone_number?: string;
   sources?: string[];
   carrier?: string | null;
@@ -53,7 +53,7 @@ function reputationToScore(
   return 50;
 }
 
-function buildSummary(data: VocalGuardOsint): string {
+function buildSummary(data: OsintApiResponse): string {
   const parts: string[] = [];
   if (data.is_scam) parts.push("Signal arnaque.");
   else if (data.is_spam) parts.push("Signal spam.");
@@ -62,10 +62,10 @@ function buildSummary(data: VocalGuardOsint): string {
   if (data.name) parts.push(`${data.name}.`);
   if (parts.length) return parts.join(" ");
   if (data.reputation) return `Réputation OSINT : ${data.reputation}.`;
-  return "Analyse OSINT VocalGuard terminée.";
+  return "Analyse OSINT Teloscope terminée.";
 }
 
-function buildRecommendation(data: VocalGuardOsint): string {
+function buildRecommendation(data: OsintApiResponse): string {
   if (data.is_scam || data.is_spam) {
     return "Ne pas répondre. Bloquer si la protection est active.";
   }
@@ -78,7 +78,7 @@ function buildRecommendation(data: VocalGuardOsint): string {
   return "Pas de signal bloquant fort.";
 }
 
-export function mapVocalGuardOsint(data: VocalGuardOsint, fallbackPhone: string): PhoneProfile {
+export function mapOsintApiResponse(data: OsintApiResponse, fallbackPhone: string): PhoneProfile {
   const score = reputationToScore(data.reputation, data.is_spam, data.is_scam);
   const region = data.region || data.city || data.department || data.country || "—";
   return {

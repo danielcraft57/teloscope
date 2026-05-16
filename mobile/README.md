@@ -33,7 +33,7 @@ Dans `app.json` → `expo.extra` :
 "osintPath": "/api/v1/osint/phone"
 ```
 
-Appel : `GET /api/v1/osint/phone/+33…` (enrichissement OSINT VocalGuard).
+Appel : `GET /api/v1/osint/phone/+33…` (API dans `teloscope/backend/`).
 
 ## Android — rôle filtrage
 

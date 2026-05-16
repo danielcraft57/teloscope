@@ -5,7 +5,8 @@
   "description": "Vitrine OSINT fakecom.me / faketel.me / fauxtel.me, alignée sur VocalGuard.",
   "scripts": {
     "dev": "npx --yes serve site -l 3080",
+    "api": "cd backend && python -m uvicorn main:app --reload --host 0.0.0.0 --port 8090",
     "start": "npm run dev",
-    "check": "node --check site/config.js && node --check site/osint-mapper.js && node --check site/verify.js && node scripts/check-site.mjs"
+    "check": "node --check site/config.js && node --check site/osint-mapper.js && node --check site/verify.js && node scripts/check-site.mjs && python -m compileall -q backend"
   }
 }

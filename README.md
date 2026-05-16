@@ -1,89 +1,61 @@
 # Teloscope
 
-Vitrine publique pour **fakecom.me**, **faketel.me** et **fauxtel.me**.
+Vitrine **fakecom.me**, **faketel.me**, **fauxtel.me** + **API OSINT** + **app mobile** — un seul dépôt.
 
-## Produit en deux temps
+## Produit
 
-1. **Vérifier un numéro** — OSINT et sources légales (opérateur, type de ligne, réputation, signaux publics) pour décider avant de répondre.
-2. **Protéger la ligne** — vente d’un **équipement matériel** qui filtre les appels commerciaux en amont du poste.
+1. **Vérifier un numéro** — OSINT (opérateur, type, commercial, réputation).
+2. **Protéger la ligne** — app mobile (blocage Android) + filtre matériel.
 
-Teloscope est le **nom et le parcours client** côté `.me`. Le moteur d’enrichissement vit dans **VocalGuard** (`backend/services/osint_service.py`, profils `phone_number_profiles`, APIs NumLookup / PhoneInfoga, etc.).
-
-## Dépôt
+## Structure
 
 | Chemin | Rôle |
 |--------|------|
-| `site/` | Site statique (HTML, CSS, JS) |
-| `site/verify.html` | Formulaire de vérification de numéro |
-| `site/hardware.html` | Présentation de l’offre matérielle |
-| `site/config.js` | URL de l’API VocalGuard (vide = mode démo) |
-| `mobile/` | App React Native (Expo) — filtrage Android + message commercial |
+| `site/` | Vitrine statique |
+| `backend/` | **API Teloscope** (`GET /api/v1/osint/phone/…`) |
+| `mobile/` | App Expo (filtrage + message commercial) |
+| `docs/OSINT.md` | Outils OSINT supportés |
 
-## Développement local
+## Démarrage local
+
+**1. API OSINT**
+
+```bash
+cd backend
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
+uvicorn main:app --reload --port 8090
+```
+
+**2. Site**
 
 ```bash
 npm run dev
 ```
 
-Ouvre `http://localhost:3080`. Sans API configurée, `/verify.html` fonctionne en **mode démo** (résultats déterministes, pas d’appel réseau OSINT).
-
-### Brancher l’API VocalGuard (OSINT réel)
-
-Éditer `site/config.js` (et `mobile/app.json` → `expo.extra`) :
+**3. Brancher l’API** — `site/config.js` :
 
 ```js
 window.TELOSCOPE_CONFIG = {
-  apiBase: "https://votre-instance-vocalguard.example",
+  apiBase: "http://localhost:8090",
   osintPath: "/api/v1/osint/phone"
 };
 ```
 
-Teloscope appelle **`GET {apiBase}{osintPath}/+33…`** — la même route que VocalGuard (`/api/v1/osint/phone/{numero}`).
+Sans `apiBase` : mode **démo** sur le site et l’app.
 
-Outils côté serveur (si installés / clés `.env`) : PhoneInfoga, NumLookup, NumVerify, OpenCNAM, HLR, Truecaller, theHarvester, détection commerciale FR, Nomorobo / ShouldIAnswer, etc. Voir `VocalGuard/docs/OSINT.md`.
-
-Liste des outils actifs sur votre instance :
+**4. Mobile** — `mobile/app.json` → `expo.extra.apiBase` (même URL).
 
 ```bash
-curl https://votre-instance/api/v1/osint/tools
+cd mobile && npm run android
 ```
 
-**CORS** : autoriser l’origine du site `.me` sur l’API FastAPI si le navigateur bloque les requêtes.
+## CI / CD
 
-## CI / CD (GitHub Actions)
-
-| Workflow | Déclencheur | Rôle |
-|----------|-------------|------|
-| `ci.yml` | push / PR sur `main` | `npm run check`, artifact `site/` |
-| `deploy.yml` | push sur `main` ou manuel | rsync SSH vers le serveur |
-
-### Secrets (Settings → Secrets → Actions, environnement `production`)
-
-| Secret | Exemple |
-|--------|---------|
-| `SSH_PRIVATE_KEY` | Clé privée déploy (PEM) |
-| `SSH_HOST` | `node12.lan` |
-| `SSH_USER` | utilisateur SSH |
-| `SSH_PORT` | `22` (optionnel) |
-| `DEPLOY_PATH` | `/var/www/teloscope/` |
-
-1. Créer les secrets ci-dessus (environnement `production`).
-2. Ajouter une variable de dépôt **Settings → Secrets and variables → Actions → Variables** :
-   - `DEPLOY_ENABLED` = `true`
-
-Sans `DEPLOY_ENABLED`, le workflow Deploy est ignoré (CI seul sur chaque push).
-
-Déploiement manuel : Actions → **Deploy** → **Run workflow** (avec `DEPLOY_ENABLED=true`).
-
-## Déploiement manuel
-
-Copier `site/` vers `/var/www/teloscope` sur `node12.lan`. Script domaines : `../configuration-mail/scripts/add_domains_teloscope_me.sh`.
-
-## Éthique et légal
-
-Vérifications limitées aux sources autorisées et à une finalité documentée. Pas de promesse de capacités hors cadre contractuel sur la vitrine.
+Voir workflows `.github/workflows/`. Deploy : `site/` vers `/var/www/teloscope` ; l’API se déploie à part (systemd, Docker, ou proxy vers le port 8090).
 
 ## Voir aussi
 
-- `AGENTS.md` — consignes pour les agents Cursor sur ce dépôt
-- Projet **VocalGuard** — implémentation OSINT et appels
+- `AGENTS.md` — consignes agents Cursor
+- `backend/README.md` — détail API

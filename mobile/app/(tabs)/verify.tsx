@@ -46,7 +46,7 @@ export default function VerifyScreen() {
   }
 
   return (
-    <Screen title="Vérifier un numéro" subtitle="OSINT Teloscope / VocalGuard (démo si API non configurée).">
+    <Screen title="Vérifier un numéro" subtitle="API Teloscope (backend/) — démo si apiBase non configuré.">
       <Card>
         <TextInput
           style={styles.input}

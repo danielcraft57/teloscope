@@ -126,7 +126,7 @@
 
   async function fetchProfile(e164) {
     var mapper = window.TELOSCOPE_OSINT;
-    if (!mapper || !mapper.osintPhoneUrl || !mapper.mapVocalGuardOsint) {
+    if (!mapper || !mapper.osintPhoneUrl || !mapper.mapOsintApiResponse) {
       throw new Error("osint-mapper.js manquant");
     }
     var url = mapper.osintPhoneUrl(apiBase, osintPath, e164);
@@ -139,7 +139,7 @@
       throw new Error(t || "Erreur " + res.status);
     }
     var raw = await res.json();
-    return mapper.mapVocalGuardOsint(raw, e164);
+    return mapper.mapOsintApiResponse(raw, e164);
   }
 
   form.addEventListener("submit", async function (e) {
@@ -152,7 +152,7 @@
     }
 
     input.value = normalized;
-    setStatus(isDemo ? "Analyse en mode démo…" : "Interrogation VocalGuard OSINT…", "loading");
+    setStatus(isDemo ? "Analyse en mode démo…" : "Interrogation API Teloscope…", "loading");
     resultEl.hidden = true;
 
     try {

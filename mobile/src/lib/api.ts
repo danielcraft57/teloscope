@@ -1,21 +1,21 @@
 import Constants from "expo-constants";
 import { demoProfile } from "./demoProfile";
 import {
-  mapVocalGuardOsint,
+  mapOsintApiResponse,
   osintPhoneUrl,
   type PhoneProfile,
-  type VocalGuardOsint,
-} from "./vocalguard";
+  type OsintApiResponse,
+} from "./osint-response";
 
 export type { PhoneProfile };
 
 function getConfig() {
   const extra = Constants.expoConfig?.extra as
-    | { apiBase?: string; osintPath?: string; lookupPath?: string }
+    | { apiBase?: string; osintPath?: string }
     | undefined;
   return {
     apiBase: (extra?.apiBase || "").replace(/\/$/, ""),
-    osintPath: extra?.osintPath || extra?.lookupPath || "/api/v1/osint/phone",
+    osintPath: extra?.osintPath || "/api/v1/osint/phone",
   };
 }
 
@@ -36,12 +36,11 @@ export async function lookupPhone(
   if (!res.ok) {
     throw new Error(await res.text().catch(() => `HTTP ${res.status}`));
   }
-  const data = (await res.json()) as VocalGuardOsint;
-  return mapVocalGuardOsint(data, raw);
+  const data = (await res.json()) as OsintApiResponse;
+  return mapOsintApiResponse(data, raw);
 }
 
 export async function fetchOsintTools(): Promise<{
-  is_wsl?: boolean;
   available_tools?: Record<string, boolean>;
 }> {
   const { apiBase } = getConfig();

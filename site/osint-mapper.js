@@ -1,5 +1,5 @@
 /**
- * Adapte la réponse GET /api/v1/osint/phone/{numero} (VocalGuard) au format Teloscope.
+ * Adapte la réponse GET /api/v1/osint/phone/{numero} (API Teloscope) au format vitrine.
  */
 (function (global) {
   function reputationToScore(reputation, isSpam, isScam) {
@@ -21,7 +21,7 @@
     if (data.name) parts.push(data.name + ".");
     if (parts.length) return parts.join(" ");
     if (data.reputation) return "Réputation OSINT : " + data.reputation + ".";
-    return "Analyse OSINT VocalGuard terminée.";
+    return "Analyse OSINT Teloscope terminée.";
   }
 
   function buildRecommendation(data) {
@@ -37,7 +37,7 @@
     return "Pas de signal bloquant fort ; rester vigilant.";
   }
 
-  function mapVocalGuardOsint(data, fallbackPhone) {
+  function mapOsintApiResponse(data, fallbackPhone) {
     var score = reputationToScore(data.reputation, data.is_spam, data.is_scam);
     var region =
       data.region ||
@@ -90,7 +90,8 @@
   }
 
   global.TELOSCOPE_OSINT = {
-    mapVocalGuardOsint: mapVocalGuardOsint,
+    mapVocalGuardOsint: mapOsintApiResponse,
+    mapOsintApiResponse: mapOsintApiResponse,
     osintPhoneUrl: osintPhoneUrl
   };
 })(typeof window !== "undefined" ? window : globalThis);
